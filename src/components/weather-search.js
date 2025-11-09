@@ -28,6 +28,43 @@ class WeatherSearch extends HTMLElement {
     render() {
         this.shadowRoot.innerHTML = `
             <style>
+                form {
+                    width: 100%;
+                    display: flex;
+                    margin-top: 1rem;
+                }
+
+                input[type="search"] {
+                    background-color: #302F4a;
+                    border-radius: .75rem;
+                    color: white;
+                    border: none;
+                    padding: 1rem;
+                    margin-right: 1rem;
+                    height: 56px;
+                    font-size: 1rem;
+                    font-family: "Special Gothic", sans-serif;
+                    font-weight: 500;
+                    font-optical-sizing: auto;
+                    width: 90%;
+                }
+
+                input[type="search"]::placeholder {
+                    color: white;
+                }
+
+                input[type="submit"] {
+                    border: none;
+                    padding: 1rem;
+                    background: #4658D9;
+                    color: white;
+                    border-radius: .75rem;
+                    font-size: 1rem;
+                    font-family: "Special Gothic", sans-serif;
+                    font-weight: 500;
+                    font-optical-sizing: auto;
+                    width: 20%;
+                }
             </style>
             <form>
                 <input type="search" placeholder="Search for a city, e.g. New York" />
