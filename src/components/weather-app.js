@@ -1,5 +1,6 @@
 import './weather-search';
-import './weather-display';
+import './weather-hero';
+import './weather-metric';
 
 class WeatherApp extends HTMLElement {
     constructor() {
@@ -23,16 +24,18 @@ class WeatherApp extends HTMLElement {
             const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`);
             const geoData = await geo.json();
 
-            console.log(geoData);
+            // console.log(geoData);
             
             const location = geoData.results?.[0];
             if(!location) throw new Error(`City ${city} not found`);
 
             const { latitude, longitude, name, country, admin1 } = location;
             const weatherRes = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=apparent_temperature,relative_humidity_2m,precipitation,windspeed_10m`
             );
             const weatherData = await weatherRes.json();
+
+            // console.log(weatherData)
 
             const WEATHER_CODES = {
                 0:  { text: "Clear sky", icon: "☀️" },
@@ -67,16 +70,47 @@ class WeatherApp extends HTMLElement {
 
             this.state = {
                 weather: {
-                    name, 
-                    country,
-                    ...(admin1 ? { region: admin1 } : {}),
                     ...weatherData.current_weather,
-                    weatherIcon: WEATHER_CODES[weatherData.current_weather.weathercode]?.icon || "❓",
-                    weatherText: WEATHER_CODES[weatherData.current_weather.weathercode]?.text || "Unknown"
+                    hero: {
+                        weatherIcon: WEATHER_CODES[weatherData.current_weather.weathercode]?.icon || "❓",
+                        weatherText: WEATHER_CODES[weatherData.current_weather.weathercode]?.text || "Unknown",
+                        time: weatherData.current_weather.time,
+                        temperature: weatherData.current_weather.temperature,
+                        name,
+                        country,
+                        ...(admin1 ? { region: admin1 } : {})
+                    },
+                    metrics: {
+                        feelslike: { 
+                            label: "Feels Like", 
+                            value: `${weatherData.hourly.apparent_temperature[0]} ${weatherData.hourly_units.apparent_temperature}` 
+                        },
+                        precipitation: { 
+                            label: "Precipitation", 
+                            value:  `${weatherData.hourly.precipitation[0]} ${weatherData.hourly_units.precipitation}` 
+                        },
+                        humidity: { 
+                            label: "Humidity", 
+                            value: `${weatherData.hourly.relative_humidity_2m[0]}${weatherData.hourly_units.relative_humidity_2m}` 
+                        },
+                        windspeed: { 
+                            label: "Wind Speed", 
+                            value: weatherData.current_weather.windspeed 
+                        }
+                    }
                 },
                 loading: false,
                 error: null
             }
+
+            window.dispatchEvent(
+                new CustomEvent('weather-update', {
+                    detail: { state: this.state },
+                    bubbles: true,
+                    composed: true
+                })
+            )
+
         } catch (err) {
             this.state = { weather: null, loading: false, error: err.message }
         }
@@ -91,15 +125,7 @@ class WeatherApp extends HTMLElement {
             <style>
             </style>
             <weather-search></weather-search>
-            ${loading? `<p>Loading...` : ''}
-            ${error ? `<p>Error: ${error}</p>` : ''}
-            ${weather ? `<weather-display></weather-display>`: ''}
         `;
-
-        const display = this.shadowRoot.querySelector('weather-display');
-        if(display && weather) {
-            display.data = weather;
-        }
     }
 }
 

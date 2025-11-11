@@ -25,55 +25,20 @@
           <h1>How's the sky looking today?</h1>
 
           <weather-app></weather-app>
-        </div>
-
-        <!-- <div class="container">
-          <hero-card></hero-card>
-
-          <div class="card-rail">
-            <div class="small-card">
-              <div class="small-card__acc">Feels Like</div>
-              <div class="small-card__value">15 deg</div>
-            </div>
-            <div class="small-card">
-              <div class="small-card__acc">Humidity</div>
-              <div class="small-card__value">46%</div>
-            </div>
-            <div class="small-card">
-              <div class="small-card__acc">Wind</div>
-              <div class="small-card__value">14 km/h</div>
-            </div>
-            <div class="small-card">
-              <div class="small-card__acc">Precipitation</div>
-              <div class="small-card__value">0 mm</div>
-            </div>
-          </div>
-
-          <div class="hourly">
-            <p>Hourly Forecast</p>
-            <select name="day" id="day-forecast">
-              <option value="tuesday">Tuesday</option>
-              <option value="wednesday">Wednesday</option>
-              <option value="thursday">Thursday</option>
-              <option value="friday">Friday</option>
-              <option value="saturday">Saturday</option>
-            </select>
+          <weather-hero></weather-hero>
+          <div class="metrics">
+            <weather-metric type="Feels Like"></weather-metric>
+            <weather-metric type="Precipitation"></weather-metric>
+            <weather-metric type="Humidity"></weather-metric>
+            <weather-metric type="Wind Speed"></weather-metric>
           </div>
         </div>
-
-        <div class="container">
-          <h2>Hourly forecast</h2>
-          <div class="hour-card">
-            <p>3pm</p>
-            <p>4pm</p>
-            <p>5pm</p>
-          </div>
-        </div> -->
         
       </div>
     </div>
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="./src/components/HeroCard.js"></script>
+    <script type="module" src="./src/components/weather-hero.js"></script>
+    <script type="module" src="./src/components/weather-metric.js"></script>
     <script type="module" src="./src/components/weather-search.js"></script>
     <script type="module" src="./src/components/weather-app.js"></script>
   </body>

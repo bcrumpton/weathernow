@@ -1,23 +1,29 @@
-class WeatherDisplay extends HTMLElement {
+class WeatherHero extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this._data = null;
+        this.state = { loading: true, data: null }
     }
 
-    set data(value) {
-        this._data = value;
-        this.render();;
+    connectedCallback() {
+        window.addEventListener('weather-update', (e) => {
+            const data = e.detail
+            this.updateFromWeather(data)
+        })
+
+        this.render();
     }
 
-    get data() {
-        return this._data;
+    updateFromWeather(data) {
+        const { hero } = data.state.weather;
+        this.state = { loading: false, data: hero }
+        this.render();
     }
 
     render() {
-        console.log('data', this._data);
+        const {loading, data} = this.state;
 
-        if(!this._data) {
+        if(!data) {
             this.shadowRoot.innerHTML = `<p>No data available</p>`;
             return;
         }
@@ -54,17 +60,17 @@ class WeatherDisplay extends HTMLElement {
             </style>
             <div class="hero-card">
                 <div class="hero-card__place">
-                    <p class="hero-card__name">${this._data.name}${this._data.region ? `, ${this._data.region}` : ''}</p>
+                    <p class="hero-card__name">${data.name}${data.region ? `, ${data.region}` : ''}</p>
                     <p class="hero-card__date">Tuesday, Aug 8th, 2025</p>
                 </div>
                 <div class="hero-card__deg">
-                    <p>${this._data.weatherIcon} ${this._data.temperature}&deg; C</p>
+                    <p>${data.weatherIcon} ${data.temperature}&deg; C</p>
                 </div>
             </div>
         `;
     }
 }
 
-window.customElements.define('weather-display', WeatherDisplay);
+window.customElements.define('weather-hero', WeatherHero);
 
 
