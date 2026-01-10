@@ -23,8 +23,6 @@ class WeatherApp extends HTMLElement {
         try {
             const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`);
             const geoData = await geo.json();
-
-            // console.log(geoData);
             
             const location = geoData.results?.[0];
             if(!location) throw new Error(`City ${city} not found`);
@@ -35,7 +33,7 @@ class WeatherApp extends HTMLElement {
             );
             const weatherData = await weatherRes.json();
 
-            // console.log(weatherData)
+            console.log(weatherData);
 
             const WEATHER_CODES = {
                 0:  { text: "Clear sky", icon: "☀️" },
@@ -120,7 +118,7 @@ class WeatherApp extends HTMLElement {
 
     render() {
         const { loading, error, weather } = this.state;
-        console.log(loading, error, weather);
+        // console.log(loading, error, weather);
         this.shadowRoot.innerHTML = `
             <style>
             </style>
