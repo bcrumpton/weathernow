@@ -1,44 +1,44 @@
-
 class WeatherSearch extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-    connectedCallback() {
-        this.render();
-    }
+  connectedCallback() {
+    this.render();
+  }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        const input = this.shadowRoot.querySelector('input');
-        const city = input.value.trim();
-        if(!city) return
+  handleSubmit(e) {
+    e.preventDefault();
+    const input = this.shadowRoot.querySelector("input");
+    const city = input.value.trim();
+    if (!city) return;
 
-        this.dispatchEvent(
-            new CustomEvent('city-search', {
-                detail: { city },
-                bubbles: true,
-                composed: true
-            })
-        )
-    }
+    this.dispatchEvent(
+      new CustomEvent("city-search", {
+        detail: { city },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
 
-    render() {
-        this.shadowRoot.innerHTML = `
+  render() {
+    this.shadowRoot.innerHTML = `
             <style>
                 form {
                     width: 100%;
                     display: flex;
                     margin-top: 1rem;
+                    gap: 1rem;
                 }
 
                 input[type="search"] {
                     background-color: #302F4a;
                     border-radius: .75rem;
                     color: white;
-                    border: none;
+                    border: 1px solid #464646;
                     padding: 1rem;
                     margin-right: 1rem;
                     height: 56px;
@@ -54,7 +54,7 @@ class WeatherSearch extends HTMLElement {
                 }
 
                 input[type="submit"] {
-                    border: none;
+                    border: 1px solid #717fe5;
                     padding: 1rem;
                     background: #4658D9;
                     color: white;
@@ -72,8 +72,8 @@ class WeatherSearch extends HTMLElement {
             </form>
         `;
 
-        this.shadowRoot.querySelector('form').onsubmit = this.handleSubmit;
-    }
+    this.shadowRoot.querySelector("form").onsubmit = this.handleSubmit;
+  }
 }
 
-window.customElements.define('weather-search', WeatherSearch);
+window.customElements.define("weather-search", WeatherSearch);
